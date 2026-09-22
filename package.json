@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/waqas-codes/youtube-clone/issues"
   },
-  "homepage": "https://github.com/waqas-codes/youtube-clone#readme"
+  "homepage": "https://github.com/waqas-codes/youtube-clone#readme",
+  "dependencies": {
+    "prettier": "^3.9.8"
+  }
 }
