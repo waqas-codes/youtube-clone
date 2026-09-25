@@ -1,15 +1,15 @@
-// const asyncHandler = (func) => async (req, res, next) => {
-//     try {
-//         await func (req, res, next)
-//     } catch (error) {
-//         res.status(error.code || 500).json({
-//             message: error.message,
-//             success: false
-//         })
-//     }
-// }
+const asyncHandler = (func) => async (req, res, next) => {
+    try {
+        await func (req, res, next)
+    } catch (error) {
+        res.status(error.code || 500).json({
+            message: error.message,
+            success: false
+        })
+    }
+}
 
-// export default asyncHandler
+export default asyncHandler
 
 
 // stander approach /////////////////
