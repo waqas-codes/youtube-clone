@@ -1,9 +1,9 @@
-require('dotenv').config({path: './env'})
+// require('dotenv').config({path: './env'})
 import dotenv from "dotenv"
 import connectDB from "./configDB/db.js"
 import {app} from './app.js'
 dotenv.config({
-    path: './.env'
+    path: '../.env'
 })
 
 
@@ -16,8 +16,4 @@ connectDB()
 })
 .catch((err) => {
     console.log("MONGO db connection failed !!! ", err);
-})
-
-app.listen(5000, () => {
-    console.log("running")
 })
