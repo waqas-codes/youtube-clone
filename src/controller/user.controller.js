@@ -385,7 +385,6 @@ const getUserChannelProfile = asyncHandler( async(req, res) => {
     )
 })
 
-
 const watchHistory = asyncHandler(async(req, res) => {
     const user = User.aggregate([
         {
