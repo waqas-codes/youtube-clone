@@ -3,6 +3,7 @@ import { apiError } from "../utils/apiError.js";
 import { User } from "../models/user.model.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import {ApiResponse} from '../utils/apiResponse.js'
+import { useReducer } from "react";
 
 const userRegisteration = asyncHandler ( async (req, res) => {
     // get user details from frontend
@@ -66,7 +67,7 @@ const userRegisteration = asyncHandler ( async (req, res) => {
 
 const generateAccessAndRefreshToken = async (userId) => {
    try {
-    const user = await user.findById(userId)
+    const user = await User.findById(userId)
     const accessToken = user.generateAccessToken()
     const refreshToken = user.generateRefreshToken()
 

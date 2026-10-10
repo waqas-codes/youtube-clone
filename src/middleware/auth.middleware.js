@@ -5,7 +5,7 @@ import User from '../models/user.model.js'
 
 const verifyToken = asyncHandler( async (req, _, next) => {
     try {
-        const token = req.cookeis?.accessToken || req.header("authorization")?.replace("Bearer", "")
+        const token = req.cookies?.accessToken || req.header("authorization")?.replace("Bearer", "")
 
         if(!token) {
             throw new apiError(401, "unAuthorized request")
