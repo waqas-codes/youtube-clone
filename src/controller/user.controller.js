@@ -26,7 +26,7 @@ const userRegisteration = asyncHandler ( async (req, res) => {
         $or: [{username}, {email}]
     })
 
-    if(existUser) {
+    if(!existUser) {
         throw new apiError(409, "User with email and username is already exist")
     }
 
@@ -75,6 +75,7 @@ const generateAccessAndRefreshToken = async (userId) => {
 
     return {refreshToken, accessToken}
    } catch (error) {
+    console.log(error)
     throw new apiError(500, "something went wrong while generating access and refresh tokens")
    }
 }
@@ -89,7 +90,11 @@ const login = asyncHandler ( async (req, res) => {
 
     const {username, email, password} = req.body
 
-    if(!email || !username) {
+    // if(!email && !username) {
+    //     throw new apiError(400, "email and username required")
+    // }
+
+    if(!(email || username)) {
         throw new apiError(400, "email and username required!")
     }
 
@@ -107,7 +112,7 @@ const login = asyncHandler ( async (req, res) => {
         throw new apiError(401, "invalid credintial!")
     }
 
-    const {accessToken, refreshToken} = generateAccessAndRefreshToken(user._id)
+    const {accessToken, refreshToken} = await generateAccessAndRefreshToken(user._id)
     const loggedInUser = await User.findById(user._id).select("-password -refreshToken")
 
     const options = {
@@ -131,33 +136,30 @@ const login = asyncHandler ( async (req, res) => {
 
 })
 
-const logout = asyncHandler( async (req, res) => {
-    await User.findByIdAndUpdate(
+const logout = asyncHandler(async(req, res) => {
+    const userId = await User.findByIdAndUpdate(
         req.user._id,
         {
-            $unset: {
-                refreshToken: 1
+            $set: {
+                refreshToken: undefined 
             }
         },
         {
             new: true
         }
     )
+    console.log(userId)
 
     const options = {
         httpOnly: true,
         secure: true
     }
 
-    return res.
-    status(200)
+    return res
+    .status(200)
     .clearCookie("accessToken", options)
     .clearCookie("refreshToken", options)
-    .json(
-        new ApiResponse(
-            200, {}, "user logged out"
-        )
-    )
+    .json(new ApiResponse(200, {}, "User logged Out"))
 })
 
 export {
