@@ -1,5 +1,5 @@
 import express from 'express'
-import {userRegisteration, login, logout} from '../controller/user.controller.js'
+import {userRegisteration, login, logout, refreshAccessToken} from '../controller/user.controller.js'
 import {upload} from '../middleware/file.middleware.js'
 import verifyToken from '../middleware/auth.middleware.js'
 const router = express.Router()
@@ -20,5 +20,6 @@ router.post("/login", login)
 
 // secure routes
 router.post('/logout', verifyToken, logout)
+router.post("refresh-token", refreshAccessToken)
 
 export default router
