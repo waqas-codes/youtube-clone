@@ -199,7 +199,6 @@ const refreshAccessToken = asyncHandler( async(req, res) => {
     )
 })
 
-
 const changePassword = asyncHandler( async(req, res) => {
     const {oldPassword, newPassword} = req.body;
 
@@ -319,6 +318,64 @@ const updateConverImage = asyncHandler( async(req, res) => {
     )
 })
 
+const getUserChannelProfile = asyncHandler( async(req, res) => {
+    const {username} = req.params
+
+    if(!username?.trim()){
+        throw new apiError(400, "user does not exist")
+    }
+
+    const channel = User.aggregate([
+        {
+            $match: {
+                username: username?.toLowerCase()
+            },
+            $lookup: {
+                from: "subscriptions",
+                localField: "_id",
+                foreignField: "channel",
+                as: "subscribers"
+            },
+            $lookup: {
+                from: "subscriptions",
+                localField: "_id",
+                foreignField: "subscriber",
+                as: "subscribeTo"
+            }
+        },
+        {
+            $addFields: {
+                subscriberCount: {
+                    $size: "$subscribers"
+                },                
+                channelsSubscribedToCount:{
+                        $size: "$subscribeTo"
+                },
+                isSubscribed: {
+                    $cond: {
+                        if: {$in: [req.user?._id, "$subscribers.subscriber"]},
+                        then: true,
+                        else: false
+                    }
+                }
+                
+            }
+        },
+        {
+            $project: {
+                fullName: 1,
+                username: 1,
+                email: 1,
+                avatar: 1,
+                coverImage: 1,
+                isSubscribed: 1,
+                channelsSubscribedToCount: 1,
+                subscriberCount: 1        
+            }
+        }
+    ])
+})
+
 export {
     userRegisteration,
     login,
@@ -328,5 +385,6 @@ export {
     getCurrentUser,
     updateAccountDetails,
     updateAvatar,
-    updateConverImage
+    updateConverImage,
+    getUserChannelProfile
 } 
