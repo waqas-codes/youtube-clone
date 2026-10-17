@@ -133,3 +133,28 @@ const updateVideo = asyncHandler(async(req, res) => {
         new ApiResponse(200, video, "video updated successfully")
     )
 })
+
+const deleteVidoe = asyncHandler(async(req, res) => {
+    const {videoId} = req.params;
+
+    if(!isValidObjectId(videoId)) {
+        throw new apiError(400, "invalid video ID")
+    }
+
+    const video = await Video.findById(videoId)
+
+    if(!video){
+        throw new apiError(404, "Video not found")
+    }
+
+    if(video.owner.toString() !== req.user_id.toString){
+        throw new apiError(403, "you are not allowed to delete the video")
+    }
+
+    await Video.findByIdAndDelete(videoId)
+
+    return res.status(200)
+    .json(
+        new ApiResponse(200, {}, "video deleted successfully")
+    )
+})
