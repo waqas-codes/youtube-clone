@@ -9,7 +9,7 @@ import {userRegisteration,
     updateAvatar,
     updateConverImage,
     getUserChannelProfile,
-    watchHistory
+    getWatchHistory
     } from '../controller/user.controller.js'
 import {upload} from '../middleware/file.middleware.js'
 import verifyToken from '../middleware/auth.middleware.js'
@@ -40,6 +40,6 @@ router.patch("/avatar", verifyToken, updateAvatar)
 router.patch("/cover-image", verifyToken, updateConverImage)
 
 router.get("/c/:username", verifyToken, getUserChannelProfile)
-router.get("/history", verifyToken, watchHistory)
+router.get("/history", verifyToken, getWatchHistory)
 
 export default router
