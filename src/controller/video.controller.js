@@ -54,7 +54,7 @@ const publishVideo = asyncHandler(async(req, res) => {
     const videoUpload = await uploadOnCloudinary(videoFile)
     const thumbnailUpload = await uploadOnCloudinary(thumbnailFile)
 
-    if(!videoUpload || thumbnailUpload){
+    if(!videoUpload || !thumbnailUpload){
         throw new apiError(500, "thumbnail or video upload failed")
     }
 
@@ -64,7 +64,7 @@ const publishVideo = asyncHandler(async(req, res) => {
         thumbnail: videoUpload.url,
         videoFile: videoUpload.url,
         duration: videoUpload.duration,
-        owner: req.user_id,
+        owner: req.user._id,
         isPublished: true
     })
 
@@ -81,7 +81,10 @@ const getVideoById = asyncHandler(async(req, res) => {
         throw new apiError(400, "invalid video ID")
     }
 
-    const video = await Video.findById(videoId)
+    const video = await Video.findOne({
+    _id: videoId,
+    isPublished: true
+});
 
     if(!video){
         throw new apiError(404, "Video not found!")
