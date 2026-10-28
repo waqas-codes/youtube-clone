@@ -13,7 +13,7 @@ app.use(cookieParser())
 
 
 // import routes 
-import router from './routes/user.router.js'
+import router from './routes/user.routes.js'
 
 //routes declation
 app.use("/api/user", router)
