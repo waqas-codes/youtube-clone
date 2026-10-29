@@ -10,6 +10,7 @@ import {
     togglePublishStatus
 } from '../controller/video.controller.js'
 const router = express.Router()
+router.use(verifyToken) // Apply verifyJWT middleware to all routes in this file
 
 const fileUpload = upload.fields([
     {
@@ -22,6 +23,11 @@ const fileUpload = upload.fields([
     }
 ])
 
-router.post('/publish', verifyToken, fileUpload, publishVideo)
+router.get("/", getAllVideos)
+router.post('/publish', fileUpload, publishVideo)
+router.get('/:videoId', getVideoById)
+router.delete('/:videoId', deleteVidoe)
+router.patch('/:videoId', upload.single("thumbnail"), updateVideo)
+router.patch("/toggle/publish/:videoId", togglePublishStatus)
 
 export default router
