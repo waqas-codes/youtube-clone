@@ -1,5 +1,6 @@
 import express from 'express'
 import { upload } from '../middleware/file.middleware.js'
+import verifyToken from '../middleware/auth.middleware.js'
 import {
      getAllVideos,
     getVideoById,
@@ -21,6 +22,6 @@ const fileUpload = upload.fields([
     }
 ])
 
-router.post('/publish', fileUpload, publishVideo)
+router.post('/publish', verifyToken, fileUpload, publishVideo)
 
 export default router
