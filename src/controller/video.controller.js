@@ -2,9 +2,9 @@ import { isValidObjectId } from "mongoose";
 import { apiError } from "../utils/apiError.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import {ApiResponse} from '../utils/apiResponse.js'
-import Video from '../models/video.model.js'
+import { Video } from '../models/video.model.js'
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
-
+ 
 const getAllVideos = asyncHandler( async(req, res) => {
     const {page = 1, limit = 10, query, sortBy = "createdAt", sortType = "desc", userId } = req.query
     
@@ -35,7 +35,6 @@ const getAllVideos = asyncHandler( async(req, res) => {
     new ApiResponse(200, videos, "vides fetched succesfully")
    )
 })
-
 
 const publishVideo = asyncHandler(async(req, res) => {
     const {description, title} = req.body
